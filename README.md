@@ -1,199 +1,183 @@
-Credit Risk Modeling: Probability of Default (PD) & Risk-Based Decisioning
+# 💳 Credit Risk Analytics  
+## Probability of Default (PD) Modeling & Risk-Based Loan Decisioning
 
-Barclays-Style Credit Risk Analytics Project
+An **end-to-end credit risk analytics project** focused on estimating the **Probability of Default (PD)** for loan applicants and translating model outputs into **governed, risk-based lending decisions**.
 
-This project demonstrates an end-to-end Probability of Default (PD) modeling framework designed for regulated banking environments, with a focus on interpretability, risk governance, and portfolio-level decisioning.
+Built using **logistic regression**, this project reflects how PD models are designed, evaluated, and operationalized in **regulated banking environments** such as **Barclays, Wells Fargo, Bank of America, Citi, Mastercard, and Visa**.
 
-The solution mirrors how credit risk and decision analytics teams at banks such as Barclays operationalize PD models — moving beyond pure model performance to risk appetite alignment and controlled lending decisions.
+---
 
-🏦 Business Context (Barclays Lens)
+## 🏦 Business Background
 
-Retail and consumer lending portfolios must balance:
+In retail and consumer lending, banks must continuously balance:
 
-Credit growth
+- 📈 Credit growth  
+- ⚠️ Default risk and expected losses  
+- 🏛️ Regulatory and capital constraints  
 
-Default risk and loss prevention
+To achieve this, **Probability of Default (PD) models** are used to:
+- Rank borrowers by credit risk  
+- Define approval, review, and rejection strategies  
+- Monitor portfolio-level risk exposure  
 
-Regulatory and capital constraints
+---
 
-Banks rely on Probability of Default (PD) models to:
+## 🎯 Problem Statement
 
-Rank borrowers by credit risk
+Design a credit risk solution that:
 
-Define approval, review, and rejection strategies
+- Estimates the **Probability of Default (PD)** for each borrower  
+- Evaluates model quality using **ROC–AUC (banking standard)**  
+- Optimizes probability thresholds based on **risk appetite**, not accuracy  
+- Converts PD scores into **Low / Medium / High** risk bands for decisioning  
 
-Monitor portfolio risk exposure
+---
 
-Objective:
-Design a PD modeling framework that supports governed credit decisions while maintaining transparency and regulatory suitability.
+## 📦 Dataset Overview
 
-🎯 Problem Statement
+- **Source:** Historical anonymized consumer loan data (2007–2018)  
+- **Scale:** 900,000+ loan records  
 
-Build a supervised credit risk model that:
+### 🏷️ Default Definition (Industry Standard)
 
-Estimates the Probability of Default (PD) for completed loans
+**Bad Loans (Default = 1):**
+- Charged Off  
+- Default  
+- Late (31–120 days)  
 
-Evaluates risk separation using ROC–AUC (banking standard)
+**Good Loans (Default = 0):**
+- Fully Paid  
 
-Optimizes probability thresholds based on risk appetite, not accuracy
+Only **completed loans** were included to avoid forward-looking bias.
 
-Converts PD scores into Low / Medium / High risk bands for lending decisions
+📌 **Observed Default Rate:** ~21%  
+> Indicates a relatively high-risk lending segment, justifying PD-based decisioning.
 
-📦 Dataset Overview
+---
 
-Source: Historical anonymized consumer loan data (2007–2018)
+## ⚙️ Data Preparation & Feature Engineering
 
-Volume: 900,000+ loan records
+### Key Steps
+- Filtered completed loans only  
+- Removed missing and inconsistent records  
+- Converted loan term to numeric format  
+- Encoded credit grades as ordinal risk indicators  
+- Selected financially interpretable variables  
 
-Target Definition (Banking Standard)
+### Final Modeling Features
+- Loan Amount  
+- Interest Rate  
+- Loan Term  
+- Monthly Installment  
+- Credit Grade (Ordinal)  
+- Annual Income  
 
-Loans were classified as:
+These features align with variables commonly used in real-world PD models.
 
-Default (1 – “Bad Loans”)
+---
 
-Charged Off
+## 🧠 Modeling Approach
 
-Default
+- **Model Used:** Logistic Regression  
+- **Why Logistic Regression?**
+  - Interpretable and regulator-friendly  
+  - Stable baseline used widely in banking  
+  - Suitable for audit and model risk review  
 
-Late (31–120 days)
+- **Train/Test Split:** 70% / 30%  
+- **Output:** Continuous PD score between 0 and 1  
 
-Non-Default (0 – “Good Loans”)
+---
 
-Fully Paid
+## 📊 Model Evaluation (Banking Standard)
 
-Only completed loans were included to avoid forward-looking bias.
+### ROC–AUC Performance
+- **Out-of-sample ROC–AUC:** **0.705**
 
-📌 Observed Default Rate: ~21%
+**Interpretation:**
+> The model correctly ranks a randomly selected defaulter higher risk than a non-defaulter ~70.5% of the time.
 
-Indicates a relatively high-risk consumer lending segment, justifying PD-based decisioning.
+This level of performance is consistent with **production-grade baseline credit models**.
 
-⚙️ Data Preparation & Feature Engineering
-Key Steps
+---
 
-Filtered completed loans only
+## 🎯 Threshold Optimization & Risk Appetite
 
-Removed missing and inconsistent records
+Banks do not rely on a fixed 0.5 probability cutoff.
 
-Converted loan term to numeric format
+| Probability Cutoff | Default Recall | Business Interpretation |
+|-------------------|--------------|-------------------------|
+| 0.50 | ~9% | Conservative, misses many risky borrowers |
+| 0.30 | ~37% | Improved default capture with controlled trade-offs |
 
-Encoded credit grades as ordinal risk indicators
+📌 **Key Insight:**  
+Probability thresholds were adjusted to align model decisions with **portfolio risk tolerance**, reflecting real banking practice.
 
-Selected financially interpretable features
+---
 
-Final Modeling Features
+## 🚦 Risk Banding & Credit Decisioning
 
-Loan Amount
+PD scores were translated into **actionable risk segments**:
 
-Interest Rate
+| PD Range | Risk Band | Typical Action |
+|--------|----------|----------------|
+| < 30% | Low Risk | Approve |
+| 30–60% | Medium Risk | Manual Review / Pricing Adjustment |
+| > 60% | High Risk | Reject |
 
-Loan Term
+This step bridges **analytics and business execution**, enabling governed lending decisions.
 
-Monthly Installment
+---
 
-Credit Grade (Ordinal)
+## 📈 Business Insights
 
-Annual Income
+- Clear separation between good and bad borrowers  
+- Meaningful improvement in default detection through threshold tuning  
+- High interpretability and audit readiness  
+- Reusable PD-to-decision framework for retail lending portfolios  
 
-These variables reflect common inputs used in real-world PD models.
+---
 
-🧠 Modeling Approach
+## 📁 Repository Structure
 
-Model Used: Logistic Regression
-
-Rationale:
-
-Interpretable and regulator-friendly
-
-Stable baseline widely used in credit risk
-
-Suitable for audit and model risk review
-
-Train/Test Split: 70% / 30%
-
-Output: Continuous PD score (0–1)
-
-📊 Model Evaluation (Banking Standard)
-ROC–AUC Performance
-
-Out-of-sample ROC–AUC: 0.705
-
-Interpretation:
-
-The model can correctly rank a randomly selected defaulter above a non-defaulter ~70.5% of the time.
-
-This performance aligns with production-grade baseline credit models used in regulated banking environments.
-
-🎯 Threshold Optimization & Risk Appetite
-
-Banks do not rely on a fixed 0.5 cutoff.
-
-Threshold Comparison
-Probability Cutoff	Default Recall	Interpretation
-0.50	~9%	Conservative, misses many defaulters
-0.30	~37%	Improved risk capture with controlled trade-offs
-
-📌 Key Insight:
-Thresholds were optimized to improve default detection in line with portfolio risk tolerance, demonstrating real-world credit decisioning.
-
-🚦 Risk Banding & Decision Governance
-
-PD scores were translated into discrete risk segments:
-
-PD Range	Risk Band	Lending Action
-< 30%	Low Risk	Approve
-30–60%	Medium Risk	Manual Review / Pricing Adjustment
-> 60%	High Risk	Reject
-
-This enables governed, explainable lending decisions, consistent with banking risk frameworks.
-
-📈 Business Impact & Insights
-
-Demonstrated clear risk separation across borrower segments
-
-Improved identification of high-risk borrowers through threshold tuning
-
-Maintained interpretability and audit readiness
-
-Created a reusable PD-to-decision pipeline suitable for retail lending
-
-📁 Repository Structure
 Credit-Risk-PD-Decisioning/
 ├── notebooks/
-│   └── 01_PD_Model_Logistic_Regression.ipynb
+│ └── 01_PD_Model_Logistic_Regression.ipynb
 ├── data/
-│   └── accepted_2007_to_2018Q4.csv
+│ └── accepted_2007_to_2018Q4.csv
 ├── reports/
-│   └── roc_curve.png
+│ └── roc_curve.png
 ├── requirements.txt
 └── README.md
+---
 
-📚 Tools & Libraries
+## 🧰 Tools & Libraries
 
-Python
+- Python  
+- pandas, numpy  
+- scikit-learn  
+- matplotlib  
 
-pandas, numpy
+---
 
-scikit-learn
+## 🔮 Future Enhancements
 
-matplotlib
+- Benchmark against XGBoost for performance comparison  
+- Add SHAP-based explainability for model governance  
+- Build Power BI / Streamlit dashboard for portfolio monitoring  
+- Deploy PD scoring pipeline via API  
 
-🔮 Future Enhancements
+---
 
-Benchmark against XGBoost for performance comparison
+## 👤 Author
 
-Add SHAP-based explainability for model risk governance
+**Aakarsh Kumar Sinha**  
+Data Analyst | Decision Analytics  
 
-Build Power BI dashboard for portfolio monitoring
+GitHub: https://github.com/AKS0908-pixel  
 
-Deploy PD scoring pipeline via API
+---
 
-👤 Author
+## 🏁 Final Note
 
-Aakarsh Kumar Sinha
-Master’s in Operational Research
-Credit Risk & Decision Analytics
-GitHub: https://github.com/AKS0908-pixel
-
-🏁 Final Note
-
-This project reflects how PD models are operationalized in real banking environments, prioritizing explainability, governance, and risk appetite alignment over black-box performance.
+This project demonstrates how **credit risk models are operationalized in real financial institutions**, prioritizing explainability, governance, and risk-aware decisioning over black-box performance.
