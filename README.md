@@ -35,8 +35,9 @@ Design a credit risk solution that:
 
 ## 📦 Dataset Overview
 
-- **Source:** Historical anonymized consumer loan data (2007–2018)  
-- **Scale:** 900,000+ loan records  
+- **Source:** Historical anonymized consumer loan data (2007–2018) (https://www.kaggle.com/datasets/wordsforthewise/lending-club?resource=download) 
+- **Scale:** 900,000+ loan records
+- Due to size and licensing constraints, the raw dataset is not included in this repository.
 
 ### 🏷️ Default Definition (Industry Standard)
 
